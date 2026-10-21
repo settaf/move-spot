@@ -6,6 +6,8 @@
 const rangees = ["A", "B", "C", "D", "E"];
 const tapisParRangee = 6;
 
+
+
 // Liste des cours.
 // Chaque cours contient ses créneaux, et chaque créneau
 // contient la liste des emplacements déjà occupés.
@@ -67,3 +69,5 @@ const cours = [
     ]
   }
 ];
+
+

@@ -3,8 +3,7 @@
 // Travaillez UNE étape à la fois et testez avant de continuer.
 // Aucune solution n'est fournie : à vous de jouer !
 // ============================================================
-
-
+    
 // ------------------------------------------------------------
 // ÉTAPE 0 : Découvrir les données
 // ------------------------------------------------------------
@@ -13,6 +12,44 @@
 //  - Que contient un cours ? Et un créneau ?
 //  - Comment accéder au prix du 2e cours ? Au 1er créneau du 3e cours ?
 // TODO : affichez `cours` dans la console avec console.log(), puis explorez-le.
+
+//e tableau cours contient le selement dyal les titickets coure et les elements dyal les canneaux
+console.log(cours);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let cartes = document.querySelectorAll('article');
+cartes.forEach((carte)=> {
+    carte.addEventListener('click',()=>{
+        cartes.forEach((c)=>{
+            c.classList.remove('ring-2', 'ring-teal-600');
+        });
+        carte.classList.add('ring-2', 'ring-teal-600');
+        let txt = document.getElementById("selected-course-title").innerHTML=carte.nom;
+    });    
+});
+
+
+
+// carte.classList.toggle('ring-2');
+// carte.classList.toggle('ring-teal-600');
+
+
+let cartes_button=document.get
+
 
 
 // ------------------------------------------------------------
@@ -24,7 +61,14 @@
 //  summary-count, summary-total, confirm-button, message
 // TODO : récupérez ces éléments et rangez-les dans des constantes.
 // Question : quelle est la différence entre getElementById et querySelector ?
-
+const courseContainer = document.getElementById('courses-container');
+const summaryCourse=document.getElementById('summary-course');
+const summarySlot=document.getElementById('summary-slot');
+const summarySeats=document.getElementById('summary-seats');
+const summaryCount=document.getElementById('summary-count');
+const summaryTotal=document.getElementById('summary-total');
+const confirmButton=document.getElementById('confirm-button');
+const message=document.getElementById('message');
 
 // ------------------------------------------------------------
 // ÉTAPE 2 : État de l'application
@@ -34,7 +78,10 @@
 // Question : de quelles informations avez-vous besoin ?
 //  (cours choisi, créneau choisi, emplacements choisis...)
 // Indice : pourquoi un tableau est-il adapté pour les emplacements choisis ?
-
+let cooureCHoisi='';
+let canneauxCHoisi='';
+let JoureChoisi='';
+let placesChoisi=[];
 
 // ------------------------------------------------------------
 // ÉTAPE 3 : Afficher les cours (US01)
@@ -48,6 +95,21 @@
 //  - Comment stocker l'id du cours sur la carte (indice : data-*) ?
 //  - Les template literals (`...${valeur}...`) peuvent-ils vous aider ?
 
+
+let template=` `;
+cours.forEach((item)=>{
+    template += `
+        <article class="cursor-pointer overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:shadow-md" data-id="pilates">
+                <img src="${item.image}" alt="Visuel du cours Pilates Core" class="h-36 w-full object-cover" />
+                <div class="space-y-1 p-4">
+                    <span class="inline-block rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-medium text-teal-700">${item.categorie}</span>
+                    <h3 class="text-lg font-semibold text-slate-900">${item.nom}</h3>
+                    <p class="text-sm text-slate-600">${item.duree}, avec ${item.coach}</p>
+                    <p class="pt-1 text-base font-bold text-slate-900">${item.prix} € <span class="text-sm font-normal text-slate-500">par place</span></p>
+                </div>
+        </article>`;
+});
+courseContainer.innerHTML=template ;
 
 // ------------------------------------------------------------
 // ÉTAPE 4 : Sélectionner un cours (US02)
@@ -137,3 +199,4 @@
 // ------------------------------------------------------------
 // Comment partager la liste des réservations confirmées entre deux pages
 // sans rien enregistrer durablement ? Réfléchissez aux options et à leurs limites.
+
