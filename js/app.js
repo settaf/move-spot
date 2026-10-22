@@ -18,40 +18,6 @@ console.log(cours);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-let cartes = document.querySelectorAll('article');
-cartes.forEach((carte)=> {
-    carte.addEventListener('click',()=>{
-        cartes.forEach((c)=>{
-            c.classList.remove('ring-2', 'ring-teal-600');
-        });
-        carte.classList.add('ring-2', 'ring-teal-600');
-        let txt = document.getElementById("selected-course-title").innerHTML=carte.nom;
-    });    
-});
-
-
-
-// carte.classList.toggle('ring-2');
-// carte.classList.toggle('ring-teal-600');
-
-
-let cartes_button=document.get
-
-
-
 // ------------------------------------------------------------
 // ÉTAPE 1 : Sélectionner les éléments du DOM
 // ------------------------------------------------------------
@@ -61,6 +27,7 @@ let cartes_button=document.get
 //  summary-count, summary-total, confirm-button, message
 // TODO : récupérez ces éléments et rangez-les dans des constantes.
 // Question : quelle est la différence entre getElementById et querySelector ?
+
 const courseContainer = document.getElementById('courses-container');
 const summaryCourse=document.getElementById('summary-course');
 const summarySlot=document.getElementById('summary-slot');
@@ -69,6 +36,8 @@ const summaryCount=document.getElementById('summary-count');
 const summaryTotal=document.getElementById('summary-total');
 const confirmButton=document.getElementById('confirm-button');
 const message=document.getElementById('message');
+const slotsContainer =document.getElementById('slots-container');
+const selectedCourseTitle = document.getElementById('selected-course-title');
 
 // ------------------------------------------------------------
 // ÉTAPE 2 : État de l'application
@@ -78,7 +47,7 @@ const message=document.getElementById('message');
 // Question : de quelles informations avez-vous besoin ?
 //  (cours choisi, créneau choisi, emplacements choisis...)
 // Indice : pourquoi un tableau est-il adapté pour les emplacements choisis ?
-let cooureCHoisi='';
+let idCoureCHoisi="";
 let canneauxCHoisi='';
 let JoureChoisi='';
 let placesChoisi=[];
@@ -99,7 +68,7 @@ let placesChoisi=[];
 let template=` `;
 cours.forEach((item)=>{
     template += `
-        <article class="cursor-pointer overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:shadow-md" data-id="pilates">
+        <article class="cursor-pointer overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:shadow-md" data-id=${item.id}>
                 <img src="${item.image}" alt="Visuel du cours Pilates Core" class="h-36 w-full object-cover" />
                 <div class="space-y-1 p-4">
                     <span class="inline-block rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-medium text-teal-700">${item.categorie}</span>
@@ -123,8 +92,27 @@ courseContainer.innerHTML=template ;
 //  - Comment retrouver le cours à partir de l'id lu dans la carte ?
 //  - Que faut-il réinitialiser quand on change de cours ?
 
+let cartes = document.querySelectorAll('article');
+console.log(cartes);
+cartes.forEach((carte)=> {
+    carte.addEventListener('click',()=>{
+        cartes.forEach((c)=>{
+            c.classList.remove('ring-2', 'ring-teal-600');
+        });
+        carte.classList.add('ring-2', 'ring-teal-600');
+        idCoureCHoisi =carte.getAttribute("data-id");
+        // console.log(idCoureCHoisi)
+        getID();
 
-// ------------------------------------------------------------
+    });    
+});
+function getID(){
+    console.log(idCoureCHoisi)
+
+}
+
+
+// ---------------------------------------------------------------
 // ÉTAPE 5 : Afficher et sélectionner un créneau (US03)
 // ------------------------------------------------------------
 // TODO : affichez les créneaux du cours sélectionné.
@@ -134,6 +122,50 @@ courseContainer.innerHTML=template ;
 // Questions :
 //  - Quand cette fonction doit-elle être appelée ?
 //  - Que se passe-t-il si aucun cours n'est encore sélectionné ?
+
+
+let template1 = document.createElement("button");
+
+let a=0;
+function getID(){
+    cours.forEach((items)=>{
+            let cann=``;
+            if(items.id==idCoureCHoisi){
+                selectedCourseTitle.textContent=items.nom;
+                
+                // template1.setAttribute(data_id=`${items.creneaux.jour},${items.creneaux.heure}`)
+                // template1.classList("rounded-xl border px-4 py-2 text-sm font-medium transition border-teal-600 bg-teal-600 text-white");
+                // template1.innerHTML=`${items.creneaux.jour} <span class="font-normal">${items.creneaux.heure}</span>`;
+                // slotsContainer.appendChild(template1);
+                // console.log(template1);
+                // console.log(slotsContainer);
+                 items.creneaux.forEach((item)=>{
+                    cann+=`<button type="button" class="rounded-xl border px-4 py-2 text-sm font-medium transition border-slate-300 bg-white text-slate-800 hover:border-teal-600" data-id="${item.jour},${item.heure}">
+                    ${item.jour} <span class="font-normal">${item.heure}</span>
+                    </button>`
+                 })
+                slotsContainer.innerHTML=cann ;
+            }
+            a++;          
+    });
+}
+let buttns = document.querySelectorAll('button[type="button"]');
+
+console.log(buttns);
+buttns.forEach((btn)=> {
+    btn.addEventListener('click',()=>{
+        buttns.forEach((b)=>{
+            b.classList.remove('bg-green' ,'bg-teal-600 text-white');
+        });
+        btn.classList.add('bg-green' ,'bg-teal-600 text-white');
+        canneauxCHoisi =btn.getAttribute("data-id");
+        console.log(canneauxCHoisi)
+        getID();
+
+    });    
+});
+
+
 
 
 // ------------------------------------------------------------
@@ -199,4 +231,3 @@ courseContainer.innerHTML=template ;
 // ------------------------------------------------------------
 // Comment partager la liste des réservations confirmées entre deux pages
 // sans rien enregistrer durablement ? Réfléchissez aux options et à leurs limites.
-
