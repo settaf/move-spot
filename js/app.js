@@ -17,7 +17,6 @@
 console.log(cours);
 
 
-
 // ------------------------------------------------------------
 // ÉTAPE 1 : Sélectionner les éléments du DOM
 // ------------------------------------------------------------
@@ -37,6 +36,7 @@ const summaryTotal=document.getElementById('summary-total');
 const confirmButton=document.getElementById('confirm-button');
 const message=document.getElementById('message');
 const slotsContainer =document.getElementById('slots-container');
+const seatsContainer =document.getElementById('seats-container');
 const selectedCourseTitle = document.getElementById('selected-course-title');
 
 // ------------------------------------------------------------
@@ -47,6 +47,7 @@ const selectedCourseTitle = document.getElementById('selected-course-title');
 // Question : de quelles informations avez-vous besoin ?
 //  (cours choisi, créneau choisi, emplacements choisis...)
 // Indice : pourquoi un tableau est-il adapté pour les emplacements choisis ?
+
 let idCoureCHoisi="";
 let canneauxCHoisi='';
 let JoureChoisi='';
@@ -103,6 +104,7 @@ cartes.forEach((carte)=> {
         idCoureCHoisi =carte.getAttribute("data-id");
         // console.log(idCoureCHoisi)
         getID();
+        slotsButtons();
 
     });    
 });
@@ -119,20 +121,18 @@ function getID(){
 //  - Mettez à jour #selected-course-title avec le nom du cours.
 //  - Le créneau choisi doit être identifiable visuellement.
 //  - Changer de créneau doit vider la sélection d'emplacements.
-// Questions :
+// Questions : 
 //  - Quand cette fonction doit-elle être appelée ?
 //  - Que se passe-t-il si aucun cours n'est encore sélectionné ?
 
 
-let template1 = document.createElement("button");
 
-let a=0;
+
 function getID(){
     cours.forEach((items)=>{
             let cann=``;
             if(items.id==idCoureCHoisi){
                 selectedCourseTitle.textContent=items.nom;
-                
                 // template1.setAttribute(data_id=`${items.creneaux.jour},${items.creneaux.heure}`)
                 // template1.classList("rounded-xl border px-4 py-2 text-sm font-medium transition border-teal-600 bg-teal-600 text-white");
                 // template1.innerHTML=`${items.creneaux.jour} <span class="font-normal">${items.creneaux.heure}</span>`;
@@ -140,33 +140,35 @@ function getID(){
                 // console.log(template1);
                 // console.log(slotsContainer);
                  items.creneaux.forEach((item)=>{
-                    cann+=`<button type="button" class="rounded-xl border px-4 py-2 text-sm font-medium transition border-slate-300 bg-white text-slate-800 hover:border-teal-600" data-id="${item.jour},${item.heure}">
+                    cann+=`<button type="button" class="rounded-xl border px-4 py-2 text-sm font-medium transition border-teal-600" data-id="${item.jour},${item.heure}">
                     ${item.jour} <span class="font-normal">${item.heure}</span>
                     </button>`
                  })
                 slotsContainer.innerHTML=cann ;
             }
-            a++;          
+                    
     });
 }
-let buttns = document.querySelectorAll('button[type="button"]');
 
-console.log(buttns);
-buttns.forEach((btn)=> {
-    btn.addEventListener('click',()=>{
-        buttns.forEach((b)=>{
-            b.classList.remove('bg-green' ,'bg-teal-600 text-white');
-        });
-        btn.classList.add('bg-green' ,'bg-teal-600 text-white');
-        canneauxCHoisi =btn.getAttribute("data-id");
-        console.log(canneauxCHoisi)
-        getID();
+function slotsButtons(){
 
-    });    
-});
+    let buttns = slotsContainer.querySelectorAll('button');
+    
+    
+    // console.log(buttns);
+    buttns.forEach((btn)=> {
+        btn.addEventListener('click',()=>{
+            buttns.forEach((b)=>{
+                b.classList.remove('bg-teal-600','text-white');
+            });
+            btn.classList.add('bg-teal-600','text-white');
+            canneauxCHoisi =btn.getAttribute("data-id");
+            // console.log(canneauxCHoisi)
+            seatslots();
+        });    
+    });
 
-
-
+}
 
 // ------------------------------------------------------------
 // ÉTAPE 6 : Afficher le plan de la salle (US04)
@@ -179,6 +181,37 @@ buttns.forEach((btn)=> {
 //  - Comment construire "A1" à partir d'une rangée et d'un numéro ?
 //  - Comment savoir si un emplacement est dans la liste des occupés (includes) ?
 //  - Faut-il une boucle imbriquée ? Pourquoi ?
+
+
+
+let seats=seatsContainer.querySelectorAll('button');
+console.log(seats);
+function seatslots (){
+    cours.creneaux.forEach((item)=>{
+        if(item.id==canneauxCHoisi){
+            seats.forEach((btn)=>{
+                 
+                let seatsId=btn.getAttribute("data-id");
+                if(item.occupes.include(seatsId)){
+                    console.log("occupees");
+                    btn.classList.remove('seat',' h-11',' rounded-lg',' text-xs',' font-semibold',' transition',' border',' border-slate-300',' bg-white',' text-slate-700',' hover:border-teal-600');
+                    btn.classList.add('seat',' h-11',' rounded-lg',' text-xs',' font-semibold',' transition',' cursor-not-allowed',' bg-slate-300 ','text-slate-500' );   
+                }
+            })
+        }
+    })
+};
+
+
+// btn.classList.remove('cursor-not-allowed' ,'g-slate-300","text-slate-500');
+// btn.classList.add('border border-slate-300 ','bg-white"," text-slate-700', 'hover:border-teal-600' );
+
+// seat h-11 rounded-lg text-xs font-semibold transition cursor-not-allowed bg-slate-300 text-slate-500" data-id="A2" aria-label="Tapis A2 occupé"
+// <button type="button" class="seat h-11 rounded-lg text-xs font-semibold transition cursor-not-allowed bg-slate-300 text-slate-500" data-id="A2" disabled aria-label="Tapis A2 occupé">A2</button>
+// selectioner button
+// seat h-11 rounded-lg text-xs font-semibold transition bg-teal-600 text-white shadow
+
+
 
 
 // ------------------------------------------------------------
@@ -231,3 +264,6 @@ buttns.forEach((btn)=> {
 // ------------------------------------------------------------
 // Comment partager la liste des réservations confirmées entre deux pages
 // sans rien enregistrer durablement ? Réfléchissez aux options et à leurs limites.
+
+
+ 
